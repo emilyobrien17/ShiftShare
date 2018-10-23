@@ -16,39 +16,43 @@ public class Main {
     // Two ints for storing summed tables
     public static double nDotDot1 = 0;
     public static double nDotDot2 = 0;
-    public static void main(String[] args) throws FileNotFoundException {
-        // Import Data File //
-        File file = new File("C:\\Users\\Emily\\Downloads\\data.txt");
-        Scanner scanner = new Scanner(file);
-        // Setup variables from external data sheet
-        // Use counter to determine when to switch to the other array.
-        int counter = 0;
-        int j = 0;
-        int k = 0;
-        while (scanner.hasNextLine()) {
-            int i = scanner.nextInt();
-            // the next 2 if's prevent us from trying to write to an array index that does not exist
-            if (k > 11) {
-                k = 0;
-                j++;
+    public static void main(String[] args) {
+        // Import Data File and populate table 1 and table 2
+        try {
+            File file = new File("C:\\Users\\Emily\\Downloads\\data.txt");
+            Scanner scanner = new Scanner(file);
+            // Setup variables from external data sheet
+            // Use counter to determine when to switch to the other array.
+            int counter = 0;
+            int j = 0;
+            int k = 0;
+            while (scanner.hasNextLine()) {
+                int i = scanner.nextInt();
+                // the next 2 if's prevent us from trying to write to an array index that does not exist
+                if (k > 11) {
+                    k = 0;
+                    j++;
+                }
+                if (j > 4) {
+                    j = 0;
+                }
+                // index 0 -> 59, table 1
+                if (counter < 60) {
+                    // Populate n..1
+                    nDotDot1 += i;
+                    tableOneData[j][k] = i;
+                }
+                // index 60 -> 119, table 2
+                else {
+                    // Populate n..2
+                    nDotDot2 += i;
+                    tableTwoData[j][k] = i;
+                }
+                k++;
+                counter++;
             }
-            if (j > 4) {
-                j = 0;
-            }
-            // index 0 -> 59, table 1
-            if (counter < 60) {
-                nDotDot1 += i;
-                tableOneData[j][k] = i;
-            }
-            // index 60 -> 119, table 2
-            else {
-                nDotDot2 += i;
-                tableTwoData[j][k] = i;
-            }
-            k++;
-            counter++;
-        }
-        scanner.close();
+            scanner.close();
+        }catch (Exception ex){ }
         // Populate the n.k1 and n.k2 arrays
         for(int x = 0;x <= 11; x++){
             nDotK1[x] = AddUpColumn(1, x);
@@ -65,9 +69,7 @@ public class Main {
                     outputFile.println((int)solveForComponent3(i));
             }
             outputFile.close();
-        }catch (Exception ex){
-            System.out.println(ex);
-        }
+        }catch (Exception ex){ }
     }
     // Add up column, for use in n.k1 and n.k2 arrays and components
     public static double AddUpColumn(int tableNum, int index) {
@@ -105,8 +107,5 @@ public class Main {
             total += tableOneData[j][k]*((nDotDot2/nDotDot1)-1);
         }
         return total;
-    }
-    public static void writeToFile(int numToPrint){
-
     }
 }
